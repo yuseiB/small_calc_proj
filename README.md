@@ -17,7 +17,7 @@ python rf_signal_eval/signal_eval.py
 
 ```fish
 # リポジトリルートへ移動
-cd /path/to/repository
+cd /path/to/repository  # ここは実際の clone 先パスに置き換えてください
 
 # 既存仮想環境が壊れている/古い場合は削除して作り直す
 rm -rf .venv
