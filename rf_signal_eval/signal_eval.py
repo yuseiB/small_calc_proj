@@ -20,21 +20,25 @@ class SimulationConfig:
 
 
 def make_time_axis(duration_s: float, sample_rate_hz: float) -> np.ndarray:
+    """Create a uniform time axis from duration and sampling rate."""
     dt = 1.0 / sample_rate_hz
     n = int(duration_s * sample_rate_hz)
     return np.arange(n) * dt
 
 
 def generate_damped_rf(t: np.ndarray, freq_hz: float, tau_s: float, phase_rad: float) -> np.ndarray:
+    """Generate an exponentially damped RF cosine signal."""
     envelope = np.exp(-t / tau_s)
     return envelope * np.cos(2.0 * np.pi * freq_hz * t + phase_rad)
 
 
 def generate_reference(t: np.ndarray, freq_hz: float, phase_rad: float) -> np.ndarray:
+    """Generate a reference local-oscillator cosine signal."""
     return np.cos(2.0 * np.pi * freq_hz * t + phase_rad)
 
 
 def lowpass_ema(x: np.ndarray, sample_rate_hz: float, cutoff_hz: float) -> np.ndarray:
+    """Apply a first-order low-pass filter with exponential moving average."""
     dt = 1.0 / sample_rate_hz
     rc = 1.0 / (2.0 * np.pi * cutoff_hz)
     alpha = dt / (rc + dt)
@@ -54,6 +58,7 @@ def downconvert_iq(
     sample_rate_hz: float,
     lowpass_cutoff_hz: float,
 ) -> tuple[np.ndarray, np.ndarray]:
+    """Mix RF signal with cosine/sine LO and extract I/Q baseband components."""
     lo_i = np.cos(2.0 * np.pi * ref_freq_hz * t + ref_phase_rad)
     lo_q = -np.sin(2.0 * np.pi * ref_freq_hz * t + ref_phase_rad)
 
@@ -66,6 +71,13 @@ def downconvert_iq(
 
 
 def estimate_phase(i_baseband: np.ndarray, q_baseband: np.ndarray, tail_ratio: float = 0.5) -> float:
+    """Estimate phase from averaged tail samples of I/Q.
+
+    tail_ratio defines the fraction of samples from the end of the waveform
+    used for averaging to reduce high-frequency residuals.
+    """
+    if not 0.0 < tail_ratio <= 1.0:
+        raise ValueError("tail_ratio must be in the range (0, 1].")
     start = int(len(i_baseband) * (1.0 - tail_ratio))
     i_mean = np.mean(i_baseband[start:])
     q_mean = np.mean(q_baseband[start:])
@@ -73,6 +85,7 @@ def estimate_phase(i_baseband: np.ndarray, q_baseband: np.ndarray, tail_ratio: f
 
 
 def run_simulation(config: SimulationConfig) -> dict[str, np.ndarray | float]:
+    """Run RF downconversion simulation and return waveforms and phase estimate."""
     t = make_time_axis(config.duration_s, config.sample_rate_hz)
     rf_signal = generate_damped_rf(t, config.rf_freq_hz, config.damping_tau_s, config.rf_phase_rad)
 
