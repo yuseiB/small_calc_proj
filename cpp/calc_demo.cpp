@@ -8,7 +8,7 @@ double free_space_path_loss_db(double distance_m, double frequency_hz) {
         throw std::invalid_argument("distance_m and frequency_hz must be positive");
     }
     constexpr double c = 299792458.0;
-    constexpr double pi = 3.14159265358979323846;
+    const double pi = std::acos(-1.0);
     return 20.0 * std::log10(4.0 * pi * distance_m * frequency_hz / c);
 }
 
