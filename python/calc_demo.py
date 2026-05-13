@@ -1,12 +1,13 @@
 import math
 from statistics import fmean
 
+C = 299_792_458.0
+
 
 def free_space_path_loss_db(distance_m: float, frequency_hz: float) -> float:
     if distance_m <= 0 or frequency_hz <= 0:
         raise ValueError("distance_m and frequency_hz must be positive")
-    c = 299_792_458.0
-    return 20.0 * math.log10(4.0 * math.pi * distance_m * frequency_hz / c)
+    return 20.0 * math.log10(4.0 * math.pi * distance_m * frequency_hz / C)
 
 
 def rms(samples: list[float]) -> float:

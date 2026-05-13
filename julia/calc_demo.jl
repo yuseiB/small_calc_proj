@@ -1,9 +1,10 @@
+C = 299_792_458.0
+
 function free_space_path_loss_db(distance_m::Float64, frequency_hz::Float64)
     if distance_m <= 0 || frequency_hz <= 0
         error("distance_m and frequency_hz must be positive")
     end
-    c = 299_792_458.0
-    return 20.0 * log10(4.0 * π * distance_m * frequency_hz / c)
+    return 20.0 * log10(4.0 * π * distance_m * frequency_hz / C)
 end
 
 function rms(samples::Vector{Float64})
