@@ -77,14 +77,16 @@ def estimate_phase(i_baseband: np.ndarray, q_baseband: np.ndarray, tail_ratio: f
     used for averaging to reduce high-frequency residuals.
     """
     if not 0.0 < tail_ratio <= 1.0:
-        raise ValueError("tail_ratio must be greater than 0.0 and at most 1.0.")
+        raise ValueError("tail_ratio must be greater than 0.0 and less than or equal to 1.0.")
     start = int(len(i_baseband) * (1.0 - tail_ratio))
     min_tail_samples = 8
-    if len(i_baseband) - start < min_tail_samples:
+    tail_samples = len(i_baseband) - start
+    if tail_samples < min_tail_samples:
         min_ratio = min_tail_samples / len(i_baseband)
         raise ValueError(
             "tail_ratio is too small for reliable estimation; "
-            f"use at least {min_tail_samples} tail samples (tail_ratio >= {min_ratio:.4f})."
+            f"got tail_ratio={tail_ratio:.4f} resulting in {tail_samples} samples, "
+            f"but at least {min_tail_samples} are required (tail_ratio >= {min_ratio:.4f})."
         )
     i_mean = np.mean(i_baseband[start:])
     q_mean = np.mean(q_baseband[start:])
