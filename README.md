@@ -12,3 +12,27 @@
 ```bash
 python rf_signal_eval/signal_eval.py
 ```
+
+## WSL Ubuntu (shell: fish) での実行手順
+
+```fish
+# リポジトリルートへ移動
+cd /home/yb/w/s/small_calc_proj
+
+# 既存仮想環境が壊れている/古い場合は削除して作り直す
+rm -rf .venv
+python3 -m venv .venv
+
+# fish 用の activate スクリプトを使う
+source .venv/bin/activate.fish
+
+# pip が無い場合の復旧
+python -m ensurepip --upgrade
+
+# 依存パッケージをインストール
+python -m pip install --upgrade pip
+python -m pip install numpy
+
+# 実行
+python rf_signal_eval/signal_eval.py
+```
