@@ -1,5 +1,7 @@
 #include <cmath>
+#include <iomanip>
 #include <iostream>
+#include <numbers>
 #include <stdexcept>
 #include <vector>
 
@@ -8,7 +10,7 @@ double free_space_path_loss_db(double distance_m, double frequency_hz) {
         throw std::invalid_argument("distance_m and frequency_hz must be positive");
     }
     constexpr double c = 299792458.0;
-    const double pi = std::acos(-1.0);
+    constexpr double pi = std::numbers::pi_v<double>;
     return 20.0 * std::log10(4.0 * pi * distance_m * frequency_hz / c);
 }
 
@@ -40,7 +42,9 @@ int main() {
     const double signal_rms = rms({0.1, -0.1, 0.2, -0.2, 0.0});
     const double y_hat = linear_model_predict({0.6, -0.2, 0.1}, 1.0, {2.0, 0.5, -1.0});
 
+    std::cout << std::fixed << std::setprecision(3);
     std::cout << "FSPL(1 km, 2.4 GHz): " << fspl << " dB\n";
+    std::cout << std::setprecision(6);
     std::cout << "RMS([0.1,-0.1,0.2,-0.2,0]): " << signal_rms << "\n";
     std::cout << "Linear model prediction: " << y_hat << "\n";
     return 0;

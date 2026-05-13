@@ -31,6 +31,6 @@ julia julia/calc_demo.jl
 ### C++
 
 ```bash
-g++ -std=c++17 cpp/calc_demo.cpp -o /tmp/calc_demo
+g++ -std=c++20 cpp/calc_demo.cpp -o /tmp/calc_demo
 /tmp/calc_demo
 ```
