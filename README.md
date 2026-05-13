@@ -17,7 +17,7 @@ python rf_signal_eval/signal_eval.py
 
 ```fish
 # リポジトリルートへ移動
-cd /home/yb/w/s/small_calc_proj
+cd /path/to/small_calc_proj
 
 # 既存仮想環境が壊れている/古い場合は削除して作り直す
 rm -rf .venv
